@@ -72,6 +72,7 @@ res.redirect("/dinosaurs")
     console.log(req.body)
 })
 
+// delete route
 app.delete("/dinosaurs/:idx", (req, res) => {
     const dinosaurs = fs.readFileSync("./dinosaurs.json")
     const dinosaursArray = JSON.parse(dinosaurs)
@@ -82,6 +83,22 @@ app.delete("/dinosaurs/:idx", (req, res) => {
     // save array into json file
     fs.writeFileSync("./dinosaurs.json", JSON.stringify(dinosaursArray))
     // redirect back to /dino route
+    res.redirect("/dinosaurs")
+})
+
+app.put("/dinosaurs/:idx", (req, res) => {
+    // goal of this route is update a dinosaur
+    const dinosaurs = fs.readFileSync("./dinosaurs.json")
+    const dinosaursArray = JSON.parse(dinosaurs)
+    // set up index
+    let idx = Number(req.params.idx)
+    const ourDino = dinosaursArray[idx] // is object
+    //update the dino
+    ourDino.name = req.body.name
+    ourDino.type = req.body.type
+    // rewrite dinosaurs.json
+    fs.writeFileSync("./dinosaurs.json", JSON.stringify(dinosaursArray))
+    // redirect to /dinosaurs
     res.redirect("/dinosaurs")
 })
 
